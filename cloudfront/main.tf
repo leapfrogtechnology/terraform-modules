@@ -67,6 +67,8 @@ resource "aws_cloudfront_distribution" "www_distribution" {
 
   aliases = [var.domain_configuration["domain"]]
 
+  tags = var.tags
+
   restrictions {
     geo_restriction {
       restriction_type = "none"
@@ -78,8 +80,4 @@ resource "aws_cloudfront_distribution" "www_distribution" {
     acm_certificate_arn = var.aws_acm_certificate_arn
     ssl_support_method  = "sni-only"
   }
-
-  depends_on = [
-    var.aws_acm_certificate_validation
-  ]
 }

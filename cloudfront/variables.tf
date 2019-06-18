@@ -18,5 +18,3 @@ variable "domain_configuration" {
 }
 
 variable "aws_acm_certificate_arn" {}
-
-variable "aws_acm_certificate_validation" {}
