@@ -14,10 +14,10 @@ variable "aws_acm_certificate_arn" {
   type = "string"
 }
 
-variable "domain_name" {
+variable "cloudfront_domain_name" {
   type = "string"
 }
 
-variable "domain_aliases" {
+variable "cloudfront_domain_aliases" {
   type = "list"
 }
