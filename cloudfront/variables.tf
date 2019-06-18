@@ -8,13 +8,14 @@ variable "tags" {
   }
 }
 
-variable "domain_configuration" {
-  description = "Domain Configuration"
-  type        = "map"
-  default = {
-    "root_domain" = "lftechnology.com.np"
-    "domain"      = "allstardevops.lftechnology.com.np"
-  }
+variable "aws_acm_certificate_arn" {
+  type = "string"
 }
 
-variable "aws_acm_certificate_arn" {}
+variable "domain_name" {
+  type = "string"
+}
+
+variable "domain_aliases" {
+  type = "list"
+}
