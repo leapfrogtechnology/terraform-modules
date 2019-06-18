@@ -31,3 +31,5 @@ variable "tags" {
     Project = "test"
   }
 }
+
+variable "aws_acm_certificate_arn" {}

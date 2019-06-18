@@ -33,6 +33,7 @@ resource "aws_alb_target_group" "app" {
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
+  tags        = var.tags
 
   health_check {
     healthy_threshold   = "3"
@@ -46,13 +47,36 @@ resource "aws_alb_target_group" "app" {
 }
 
 # Redirect all traffic from the ALB to the target group
-resource "aws_alb_listener" "front_end" {
+resource "aws_alb_listener" "my_website_https" {
+  load_balancer_arn = aws_alb.main.id
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = var.aws_acm_certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.app.id
+  }
+}
+
+
+resource "aws_lb_listener" "my_website_http" {
   load_balancer_arn = aws_alb.main.id
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
+    type = "redirect"
     target_group_arn = aws_alb_target_group.app.id
-    type             = "forward"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+      host = "#{host}"
+      path = "/#{path}"
+      query = "#{query}"
+    }
   }
 }
