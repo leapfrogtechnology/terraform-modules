@@ -49,7 +49,7 @@ resource "aws_cloudfront_distribution" "www_distribution" {
   default_cache_behavior {
     viewer_protocol_policy = "redirect-to-https"
     compress               = true
-    allowed_methods        = ["GET", "HEAD"]
+    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
     // This needs to match the `origin_id` above.
     target_origin_id = var.cloudfront_domain_name
