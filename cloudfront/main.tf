@@ -28,9 +28,6 @@ POLICY
 resource "aws_cloudfront_distribution" "www_distribution" {
   // origin is where CloudFront gets its content from.
   origin {
-    // We need to set up a "custom" origin because otherwise CloudFront won't
-    // redirect traffic from the root domain to the www domain, that is from
-    // runatlantis.io to www.runatlantis.io.
     custom_origin_config {
       // These are all the defaults.
       http_port              = "80"
@@ -42,7 +39,7 @@ resource "aws_cloudfront_distribution" "www_distribution" {
     // Here we're using our S3 bucket's URL!
     domain_name = aws_s3_bucket.bucket.website_endpoint
     // This can be any name to identify this origin.
-    origin_id   = aws_s3_bucket.bucket.bucket_domain_name
+    origin_id = var.domain_configuration["domain"]
   }
 
   enabled             = true
@@ -55,7 +52,7 @@ resource "aws_cloudfront_distribution" "www_distribution" {
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
     // This needs to match the `origin_id` above.
-    target_origin_id = aws_s3_bucket.bucket.bucket_domain_name
+    target_origin_id = var.domain_configuration["domain"]
     min_ttl          = 0
     default_ttl      = 86400
     max_ttl          = 31536000
@@ -68,13 +65,21 @@ resource "aws_cloudfront_distribution" "www_distribution" {
     }
   }
 
+  aliases = [var.domain_configuration["domain"]]
+
   restrictions {
     geo_restriction {
       restriction_type = "none"
     }
   }
 
+  // Here's where our certificate is loaded in!
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn = var.aws_acm_certificate_arn
+    ssl_support_method  = "sni-only"
   }
+
+  depends_on = [
+    var.aws_acm_certificate_validation
+  ]
 }
