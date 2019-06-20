@@ -3,11 +3,18 @@ resource "aws_security_group" "lb" {
   name        = var.alb_security_group_name
   description = var.alb_security_group_description
   vpc_id      = var.vpc_id
-  tags        = var.tags
+//  tags        = var.tags
   ingress {
     protocol    = "tcp"
     from_port   = 80
     to_port     = 80
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -53,7 +60,7 @@ resource "aws_alb_listener" "my_website_https" {
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
   certificate_arn   = var.aws_acm_certificate_arn
-  tags        = var.tags
+//  tags        = var.tags
   default_action {
     type             = "forward"
     target_group_arn = aws_alb_target_group.app.id
@@ -65,7 +72,7 @@ resource "aws_lb_listener" "my_website_http" {
   load_balancer_arn = aws_alb.main.id
   port              = "80"
   protocol          = "HTTP"
-  tags              = var.tags
+//  tags              = var.tags
   default_action {
     type = "redirect"
     target_group_arn = aws_alb_target_group.app.id

@@ -1,4 +1,4 @@
-variable "faragte_cluster_name" {
+variable "fargate_cluster_name" {
   type = "string"
 }
 
