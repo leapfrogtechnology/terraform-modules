@@ -10,11 +10,6 @@ variable "vpc_id" {
   type = "string"
 }
 
-variable "ec2_instance_ami" {
-  type = "string"
-  default = "ami-024a64a6685d05041"
-}
-
 variable "ec2_instance_type" {
   type = "string"
   default = "t2.micro"

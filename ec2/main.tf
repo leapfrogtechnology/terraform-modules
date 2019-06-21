@@ -66,8 +66,24 @@ resource "aws_key_pair" "default" {
   public_key = tls_private_key.ec2.public_key_openssh
 }
 
+data "aws_ami" "ubuntu" {
+    most_recent = true
+
+    filter {
+        name   = "name"
+        values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+    }
+
+    filter {
+        name   = "virtualization-type"
+        values = ["hvm"]
+    }
+
+    owners = ["099720109477"] # Canonical
+}
+
 resource "aws_instance" "ec2" {
-  ami           = var.ec2_instance_ami
+  ami           = data.aws_ami.ubuntu.id
   instance_type = var.ec2_instance_type
   key_name = aws_key_pair.default.id
   subnet_id = var.public_subnet_id
