@@ -70,7 +70,7 @@ resource "aws_instance" "ec2" {
   ami           = var.ec2_instance_ami
   instance_type = var.ec2_instance_type
   key_name = aws_key_pair.default.id
-  subnet_id = var.private_subnet_id
+  subnet_id = var.public_subnet_id
   vpc_security_group_ids = [aws_security_group.ec2.id]
   tags = var.tags
 }
