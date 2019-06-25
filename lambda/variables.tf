@@ -18,6 +18,9 @@ variable "lambda_runtime" {
 
 variable "lambda_variables" {
   type = "map"
+  default = {
+    foo = "bar"
+  }
 }
 
 variable "tags" {
