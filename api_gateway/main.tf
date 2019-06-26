@@ -41,12 +41,12 @@ resource "aws_api_gateway_deployment" "lambda" {
 }
 
 resource "aws_lambda_permission" "apigw" {
-  statement_id  = "AllowAPIGatewayInvoke"
+  statement_id  = "AllowExecutionFromApiGateway"
   action        = "lambda:InvokeFunction"
   function_name = var.lambda_arn
   principal     = "apigateway.amazonaws.com"
 
-  source_arn = "${aws_api_gateway_deployment.lambda.execution_arn}/*/*"
+  source_arn = "${replace(aws_api_gateway_deployment.lambda.execution_arn, var.development_stage, "")}*/*"
 }
 
 

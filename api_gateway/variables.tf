@@ -26,6 +26,7 @@ variable "lambda_invoke_arn" {
 
 variable "development_stage" {
   type = "string"
+  default = "dev"
 }
 
 variable "lambda_arn" {
