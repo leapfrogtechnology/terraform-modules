@@ -14,7 +14,7 @@ variable "aws_acm_certificate_arn" {
   type = "string"
 }
 
-variable "cloudfront_domain_name" {
+variable "cloudfront_origin_id" {
   type = "string"
 }
 
