@@ -9,28 +9,7 @@ resource "aws_security_group" "ec2" {
     protocol    = "tcp"
     from_port   = 0
     to_port     = 65535
-    cidr_blocks = ["202.70.67.113/32"]
-  }
-
-  ingress {
-    protocol    = "tcp"
-    from_port   = 0
-    to_port     = 65535
-    cidr_blocks = ["182.93.83.51/32"]
-  }
-
-  ingress {
-    protocol    = "tcp"
-    from_port   = 0
-    to_port     = 65535
-    cidr_blocks = ["202.166.206.8/32"]
-  }
-
-  ingress {
-    protocol    = "tcp"
-    from_port   = 0
-    to_port     = 65535
-    cidr_blocks = ["202.79.34.78/32"]
+    cidr_blocks = var.ec2_cidr_blocks
   }
 
   ingress {
@@ -66,24 +45,24 @@ resource "aws_key_pair" "default" {
   public_key = tls_private_key.ec2.public_key_openssh
 }
 
-data "aws_ami" "ubuntu" {
+data "aws_ami" "image" {
     most_recent = true
 
     filter {
         name   = "name"
-        values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+        values = var.image_filter_values
     }
 
     filter {
         name   = "virtualization-type"
-        values = ["hvm"]
+        values = var.virtualization_filter_values
     }
 
-    owners = ["099720109477"] # Canonical
+    owners = var.image_owners
 }
 
 resource "aws_instance" "ec2" {
-  ami           = data.aws_ami.ubuntu.id
+  ami           = data.aws_ami.image.id
   instance_type = var.ec2_instance_type
   key_name = aws_key_pair.default.id
   subnet_id = var.public_subnet_id
