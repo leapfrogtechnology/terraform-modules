@@ -1,32 +1,9 @@
-resource "aws_iam_role" "iam_for_lambda" {
-  name = "iam_for_lambda"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-}
-
 resource "aws_lambda_function" "lambda" {
   filename      = var.lambda_file_name
   function_name = var.lambda_function_name
-  role          = aws_iam_role.iam_for_lambda.arn
+  role          = var.lambda_executation_role_arn
   handler       = var.lambda_handler
 
-  # The filebase64sha256() function is available in Terraform 0.11.12 and later
-  # For Terraform 0.11.11 and earlier, use the base64sha256() function and the file() function:
-  # source_code_hash = "${base64sha256(file("lambda_function_payload.zip"))}"
   source_code_hash = filebase64sha256(var.lambda_file_name)
 
   runtime = var.lambda_runtime
@@ -34,4 +11,6 @@ resource "aws_lambda_function" "lambda" {
   environment {
     variables = var.lambda_variables
   }
+
+  tags = var.tags
 }

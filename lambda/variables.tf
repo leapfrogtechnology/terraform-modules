@@ -23,6 +23,10 @@ variable "lambda_variables" {
   }
 }
 
+variable "lambda_executation_role_arn" {
+  type = "string"
+}
+
 variable "tags" {
   type = "map"
   default = {
