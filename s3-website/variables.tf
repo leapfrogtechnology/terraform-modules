@@ -9,3 +9,11 @@ variable "tags" {
     Project = "test"
   }
 }
+variable "bucket_index_document" {
+  type = "string"
+  default = "index.html"
+}
+variable "bucket_error_document" {
+  type = "string"
+  default = "index.html"
+}

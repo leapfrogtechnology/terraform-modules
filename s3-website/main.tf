@@ -5,8 +5,8 @@ resource "aws_s3_bucket" "bucket" {
   tags = var.tags
 
   website {
-    index_document = "index.html"
-    error_document = "index.html"
+    index_document = var.bucket_index_document
+    error_document = var.bucket_error_document
   }
 
   policy = <<POLICY
