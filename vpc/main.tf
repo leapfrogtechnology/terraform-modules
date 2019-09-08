@@ -12,6 +12,11 @@ resource "aws_subnet" "private" {
   cidr_block = cidrsubnet(aws_vpc.main.cidr_block, 8, count.index)
   vpc_id = aws_vpc.main.id
   availability_zone = data.aws_availability_zones.available.names[count.index]
+  tags {
+    Name = var.tags.Name
+    Project = var.tags.Project
+    Public = false
+  }
 }
 
 # Create a Public Subnet
@@ -21,6 +26,11 @@ resource "aws_subnet" "public" {
   vpc_id = aws_vpc.main.id
   availability_zone = data.aws_availability_zones.available.names[count.index]
   map_public_ip_on_launch = true
+  tags {
+    Name = var.tags.Name
+    Project = var.tags.Project
+    Public = true
+  }
 }
 
 # Internet Gateway for Public Subnet
